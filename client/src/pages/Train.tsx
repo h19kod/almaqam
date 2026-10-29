@@ -86,6 +86,7 @@ export default function Train() {
           ))}
         </div>
         {!user && <p className="hint"><Link to="/login?next=/train">سجّل الدخول</Link> لنحفظ نتائجك ونُريك أي المقامات تخلط بينها.</p>}
+        <p className="hint"><Link to="/leaders">لوحة الآذان</Link>: من ميّز أكثر المقامات هذا الأسبوع.</p>
       </div>
     );
   }

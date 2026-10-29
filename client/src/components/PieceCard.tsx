@@ -42,7 +42,9 @@ export default function PieceCard({ c, onDelete }: { c: Composition; onDelete?: 
           <h3><Link to={`/piece/${c.id}`}>{c.title}</Link></h3>
           <p>
             <Link to={`/maqam/${m.id}`} className="tag">{m.name}</Link>
-            <span>{c.author}</span>
+            <Link to={`/u/${c.authorId}`} className="muted-link">{c.author}</Link>
+            {c.comments > 0 && <span title="تعليقات">{c.comments} تعليق</span>}
+            {c.parent && <span className="tag tag-muted">إعادة عزف</span>}
             {!c.public && <span className="tag tag-muted">خاصة</span>}
           </p>
         </div>

@@ -99,18 +99,19 @@ export default function Home() {
       <section className="band">
         <div className="wrap">
           <h2 className="section-title">ثلاث طرق للدخول</h2>
+          <p className="hint doors-more">وأيضاً: <Link to="/train">درّب أذنك</Link>، <Link to="/map">خريطة المقامات</Link>، و<Link to="/gallery">المعرض</Link>.</p>
           <div className="doors">
-            <Link to="/maqamat" className="door">
+            <Link to="/learn" className="door">
               <span className="door-word">تعلّم</span>
-              <span className="door-text">ثمانية مقامات، كل واحد بأجناسه وسيره وجملة تسمعها بصوت العود.</span>
+              <span className="door-text">تسعة دروس من العجم إلى السيكاه، كل درس بأسئلة تسمع وتلمس فيها الفرق.</span>
             </Link>
             <Link to="/studio" className="door">
               <span className="door-word">اعزف</span>
               <span className="door-text">عود من خمس عشرة نغمة على لوحة المفاتيح أو بلمس الشاشة. سجّل جملتك واحفظها.</span>
             </Link>
-            <Link to="/train" className="door">
-              <span className="door-word">درّب أذنك</span>
-              <span className="door-text">نعزف لك سلّماً من قرار واحد، وأنت تخمّن المقام. نحفظ نتائجك لتعرف أين تخطئ.</span>
+            <Link to="/tuner" className="door">
+              <span className="door-word">غنِّ</span>
+              <span className="door-text">المُدوزِن يسمعك عبر الميكروفون، يضع صوتك على سلّم المقام، ويخمّن أي مقام تغنّي.</span>
             </Link>
           </div>
         </div>

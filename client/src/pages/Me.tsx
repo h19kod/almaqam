@@ -3,6 +3,7 @@ import { Link, Navigate } from 'react-router-dom';
 import PieceCard from '../components/PieceCard';
 import { api, type Composition, type Stats } from '../lib/api';
 import { useAuth } from '../lib/auth';
+import { LESSONS } from '../lib/lessons';
 import { MAQAMAT } from '../lib/maqamat';
 
 export default function Me() {
@@ -30,6 +31,11 @@ export default function Me() {
   return (
     <div className="wrap page me">
       <h1 className="page-title">أهلاً {user.name}</h1>
+      <p className="page-lede">
+        {stats?.dayStreak ? `تتدرّب منذ ${stats.dayStreak === 1 ? 'يوم واحد' : `${stats.dayStreak} أيام`} متتالية.` : 'تدرّب اليوم لتبدأ سلسلة أيامك.'}
+        {' '}<Link to={`/u/${user.id}`}>صفحتك العامة</Link>
+        {user.role === 'admin' && <> · <Link to="/admin">الإشراف</Link></>}
+      </p>
 
       <div className="numbers">
         <div><strong>{acc === null ? '—' : `${acc}٪`}</strong><span>دقّة أذنك</span></div>
@@ -37,6 +43,27 @@ export default function Me() {
         <div><strong>{stats?.best ?? 0}</strong><span>أطول سلسلة صحيحة</span></div>
         <div><strong>{stats?.likesReceived ?? 0}</strong><span>إعجاباً بمقطوعاتك</span></div>
       </div>
+
+      {stats && (
+        <>
+          <h2 className="section-title">الإنجازات</h2>
+          <ul className="badges">
+            {stats.achievements.map((a) => (
+              <li key={a.id} className={a.earned ? 'on' : ''}>
+                <span className="badge-brick" aria-hidden="true" />
+                <strong>{a.name}</strong>
+                <span>{a.text}</span>
+                <span className="sr">{a.earned ? 'مكتسب' : 'لم يُكتسب بعد'}</span>
+              </li>
+            ))}
+          </ul>
+          <h2 className="section-title">المسار</h2>
+          <p className="hint">
+            أكملت {stats.lessons.length} من {LESSONS.length} دروس.{' '}
+            <Link to="/learn">{stats.lessons.length >= LESSONS.length ? 'راجع الدروس' : 'تابع المسار'}</Link>
+          </p>
+        </>
+      )}
 
       <h2 className="section-title">أذنك مع كل مقام</h2>
       {stats && stats.total > 0 ? (

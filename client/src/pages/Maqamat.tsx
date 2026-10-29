@@ -23,6 +23,7 @@ export default function Maqamat() {
         كل سطر مقام كامل من قراره إلى جوابه. الحجرات الضيقة أرباع أصوات، والعريضة تون ونصف.
         قارن بينها بالنظر قبل السمع: الحجاز والكرد يختلفان في حجرة واحدة فقط.
       </p>
+      <p className="hint"><Link to="/map">خريطة المقامات</Link> تُريك أيّها قريب من أيّها، وأين يمكن الانتقال.</p>
       <ol className="mlist">
         {MAQAMAT.map((m) => (
           <li key={m.id} className="mrow" style={{ ['--glaze' as string]: m.glaze }}>

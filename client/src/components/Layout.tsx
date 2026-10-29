@@ -4,10 +4,16 @@ import { useAuth } from '../lib/auth';
 import { stopAll } from '../lib/audio';
 
 const NAV = [
+  { to: '/learn', label: 'المسار' },
   { to: '/maqamat', label: 'المقامات' },
   { to: '/studio', label: 'الاستوديو' },
+  { to: '/tuner', label: 'المُدوزِن' },
   { to: '/train', label: 'درّب أذنك' },
   { to: '/gallery', label: 'المعرض' },
+];
+const MORE = [
+  { to: '/map', label: 'خريطة المقامات' },
+  { to: '/leaders', label: 'لوحة الآذان' },
 ];
 
 export function Mark({ size = 28 }: { size?: number }) {
@@ -76,7 +82,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             اسمع بسمّاعات إن استطعت، فأرباع الأصوات تضيع في سمّاعات الهاتف الصغيرة.
           </p>
           <nav className="foot-nav" aria-label="روابط">
-            {NAV.map((n) => <Link key={n.to} to={n.to}>{n.label}</Link>)}
+            {[...NAV, ...MORE].map((n) => <Link key={n.to} to={n.to}>{n.label}</Link>)}
           </nav>
         </div>
       </footer>

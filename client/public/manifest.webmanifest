@@ -1,0 +1,21 @@
+{
+  "name": "مقام — اسمع المقامات واعزفها",
+  "short_name": "مقام",
+  "description": "تعلّم المقامات العربية واعزفها ودرّب أذنك.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0e1b3d",
+  "theme_color": "#0e1b3d",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/icon-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "الاستوديو", "url": "/studio" },
+    { "name": "المُدوزِن", "url": "/tuner" },
+    { "name": "درّب أذنك", "url": "/train" }
+  ]
+}

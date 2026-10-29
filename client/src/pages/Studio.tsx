@@ -11,7 +11,7 @@ const KEYS = ['KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyQ', 'K
 const KEY_LABEL = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I'];
 const DRAFT = 'maqam:draft';
 
-interface Draft { maqam: MaqamId; notes: SeqNote[]; title: string }
+interface Draft { maqam: MaqamId; notes: SeqNote[]; title: string; parentId?: number }
 
 export default function Studio() {
   const [params, setParams] = useSearchParams();
@@ -31,6 +31,7 @@ export default function Studio() {
   const [isPublic, setPublic] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [parent, setParent] = useState<{ id: number; title: string; author: string } | null>(null);
 
   const recStart = useRef(0);
   const open = useRef(new Map<number, number>()); // degree -> index in notes being held
@@ -42,9 +43,22 @@ export default function Studio() {
     try {
       const d = JSON.parse(raw) as Draft;
       setId(d.maqam); setNotes(d.notes); setTitle(d.title);
+      if (d.parentId) setParent({ id: d.parentId, title: '', author: '' });
     } catch { /* ignore broken draft */ }
     sessionStorage.removeItem(DRAFT);
   }, []);
+
+  // ?remix=ID: start from someone else's piece
+  useEffect(() => {
+    const rid = Number(params.get('remix'));
+    if (!rid) return;
+    api.composition(rid).then(({ composition: c }) => {
+      setId(c.maqam);
+      setNotes(c.notes);
+      setTitle(`على خطى «${c.title}»`.slice(0, 60));
+      setParent({ id: c.id, title: c.title, author: c.author });
+    }).catch(() => setError('لم نجد المقطوعة التي تريد إعادة عزفها.'));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => { prewarm(id); }, [id]);
   useEffect(() => { setDrone(drone ? id : null); }, [drone, id]);
@@ -96,7 +110,7 @@ export default function Studio() {
   function toggleRecord() {
     if (recording) { setRecording(false); return; }
     stopAll(); setPlaying(false);
-    setNotes([]); setError('');
+    setNotes([]); setError(''); setParent(null);
     open.current.clear();
     recStart.current = performance.now();
     setRecording(true);
@@ -119,13 +133,13 @@ export default function Studio() {
     e.preventDefault();
     setError('');
     if (!user) {
-      sessionStorage.setItem(DRAFT, JSON.stringify({ maqam: id, notes, title } satisfies Draft));
+      sessionStorage.setItem(DRAFT, JSON.stringify({ maqam: id, notes, title, parentId: parent?.id } satisfies Draft));
       nav(`/login?next=${encodeURIComponent(`/studio?maqam=${id}`)}`);
       return;
     }
     setSaving(true);
     try {
-      const { composition } = await api.save({ title: title.trim(), maqam: id, notes, public: isPublic });
+      const { composition } = await api.save({ title: title.trim(), maqam: id, notes, public: isPublic, parentId: parent?.id });
       nav(`/piece/${composition.id}`);
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'تعذّر الحفظ');
@@ -141,6 +155,13 @@ export default function Studio() {
         اختر مقاماً، واعزف بالضغط على الحجرات أو بأزرار لوحة المفاتيح. الصف الأسفل القرار، والأعلى الجواب.
         لن تخرج عن المقام مهما ضغطت.
       </p>
+
+      {parent && parent.title && (
+        <p className="notice">
+          تعيد عزف <Link to={`/piece/${parent.id}`}>«{parent.title}»</Link> لـ{parent.author}. شغّلها لتسمعها، أو سجّل نسختك من جديد.
+          غيّر المقام لتسمع الجملة نفسها بطابع آخر.
+        </p>
+      )}
 
       <div className="chips" aria-label="المقام">
         {MAQAMAT.map((x) => (
