@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "maqam", "runtimeExecutable": "node", "runtimeArgs": ["server/src/index.js"], "port": 4300 }
+  ]
+}
